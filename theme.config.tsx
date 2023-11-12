@@ -40,13 +40,17 @@ const config: DocsThemeConfig = {
   editLink: { component: () => null },
   feedback: {
     useLink: () => 'https://forums.slime2.stream/forums/help.13/',
-    content: () => 'Have questions? Ask in the forums 🔗',
+    content: () => <span>Have questions? Ask in the forums 🔗</span>,
   },
   toc: {
     headingComponent: ({ children }) => {
-      return children.endsWith('{:js}') || children.endsWith('{:ts}')
-        ? children.slice(0, -5)
-        : children
+      return (
+        <span>
+          {children.endsWith('{:js}') || children.endsWith('{:ts}')
+            ? children.slice(0, -5)
+            : children}
+        </span>
+      )
     },
     backToTop: true,
   },
