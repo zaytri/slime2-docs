@@ -1,0 +1,20 @@
+{
+  "group": "Group",
+  "button": "Button",
+  "text-display": "Text Display",
+  "image-display": "Image Display",
+  "---": { "type": "separator", "title": "Basic Inputs" },
+  "text-input": "Text Input",
+  "number-input": "Number Input",
+  "boolean-input": "Boolean Input",
+  "----": { "type": "separator", "title": "Inputs with Options" },
+  "dropdown-input": "Dropdown Input",
+  "select-input": "Select Input",
+  "-----": { "type": "separator", "title": "Media Inputs" },
+  "image-input": "Image Input",
+  "video-input": "Video Input",
+  "audio-input": "Audio Input",
+  "------": { "type": "separator", "title": "Other Inputs" },
+  "color-input": "Color Input",
+  "font-input": "Font Input"
+}

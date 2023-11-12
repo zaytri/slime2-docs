@@ -1,0 +1,53 @@
+# 🔽 Dropdown Input Setting
+
+A dropdown menu of several options, and the user can only choose one.
+
+`placeholder` will create a disabled option at the top of the options list.
+
+```ts filename="Setting Definition"
+type DropdownInputSetting = {
+  type: 'dropdown-input'
+  label: string
+  id: string
+  defaultValue?: Value
+  options: Option[]
+  placeholder?: string
+  description?: string
+}
+
+type Option = {
+  label: string
+  value: Value
+}
+
+type Value = string | number | boolean
+```
+
+> If no `defaultValue` is given, the default value is the value of first option in `options`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Theme',
+      id: 'theme',
+      type: 'dropdown-input',
+      defaultValue: 'cute',
+      options: [
+        { label: 'Clean', value: 'clean' },
+        { label: 'Cute', value: 'cute' },
+        { label: 'Fancy', value: 'fancy' },
+      ],
+      placeholder: 'Select a theme',
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{ "theme": "cute" }
+```
+
+![Dropdown Input Preview](/previews/dropdown-input.png)

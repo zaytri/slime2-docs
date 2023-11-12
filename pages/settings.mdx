@@ -1,0 +1,30 @@
+import { Cards, Card } from 'nextra/components'
+
+# ⚙️ Widget Settings
+
+There are 14 different settings you can define, using [**`slime2.widget.loadSettings(){:js}`**](/functions/widget#slime2widgetloadsettingsjs)
+
+<Cards>
+  <Card title='📁 Group' href='/settings/group' />
+  <Card title='▶️ Button' href='/settings/button' />
+  <Card title='🔤 Text Display' href='/settings/text-display' />
+  <Card title='🖼️ Image Display' href='/settings/image-display' />
+  <Card title='📝 Text Input' href='/settings/text-input' />
+  <Card title='#️⃣ Number Input' href='/settings/number-input' />
+  <Card title='✅ Boolean Input' href='/settings/boolean-input' />
+  <Card title='🔽 Dropdown Input' href='/settings/dropdown-input' />
+  <Card title='🔘 Select Input' href='/settings/select-input' />
+  <Card title='📷 Image Input' href='/settings/image-input' />
+  <Card title='📺 Video Input' href='/settings/video-input' />
+  <Card title='🔉 Audio Input' href='/settings/audio-input' />
+  <Card title='🎨 Color Input' href='/settings/color-input' />
+  <Card title='🖊️ Font Input' href='/settings/font-input' />
+</Cards>
+
+Every setting is defined with a `label`, and `id`, and a `type`, indicating one of the 14 types above. Additionally, every input setting can be defined with a `defaultValue` and a `description`. Any links included in a `description` will automatically be made into a clickable link.
+
+> `id` must be unique, or unique to the group it's in. Any string can be used for `id`, except for `'__id'{:js}`.
+
+Every defined input and group setting will create a key in the data object returned by [**`slime2.widget.getData(){:js}`**](/functions/widget#slime2widgetgetdatajs), based on the `id`, with the value of that input or data object for that group.
+
+> Button, Text Display, and Image Display settings don't hold any values, so they won't exist in the data object, but are still required to have a unique `id`.

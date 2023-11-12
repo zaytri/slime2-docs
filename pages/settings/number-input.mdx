@@ -1,0 +1,92 @@
+import { Cards, Card } from 'nextra/components'
+
+# #️⃣ Number Input Setting
+
+There are 2 different number inputs, **Standard** and **Slider**, depending on the value of `slider`.
+
+<Cards>
+  <Card title='#️⃣ Standard Number Input' href='#standard-number-input' />
+  <Card title='🎚️ Slider Number Input' href='#slider-number-input' />
+</Cards>
+
+By default, `step` is `1{:js}`, which allows only integers. Setting `step` to `'any'{:js}` will allow any decimal numbers.
+
+`min` and `max` values aren't strictly enforced, so ensure that you validate them in your code.
+
+## Standard Number Input
+
+```ts filename="Setting Definition"
+type NumberInputSetting = {
+  type: 'number-input'
+  label: string
+  id: string
+  defaultValue?: number | null
+  min?: number
+  max?: number
+  step?: number | 'any'
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is `null{:js}`, and will also be `null{:js}` if the user empties out the input field.
+
+## Slider Number Input
+
+Set `slider` to `true{:js}` to create a slider number input.
+
+A slider is shown with the min and max values labeled, alongside a standard number input that shares the slider value and can be directly modified.
+
+```ts filename="Setting Definition" {5}
+type NumberSliderInputSetting = {
+  type: 'number-input'
+  label: string
+  id: string
+  slider: true
+  defaultValue?: number | null
+  min?: number
+  max?: number
+  step?: number | 'any'
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is `null{:js}`, and will also be `null{:js}` if the user empties out the input field.
+>
+> For sliders, by default, `min === 0{:js}` and `max === 100{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Font Size (px)',
+      id: 'fontSize',
+      type: 'number-input',
+      defaultValue: 16,
+      step: 1,
+      min: 8,
+      description: 'Message text size',
+    },
+    {
+      label: 'Volume (%)',
+      id: 'volume',
+      type: 'number-input',
+      slider: true,
+      defaultValue: 50,
+      step: 1,
+      min: 0,
+      max: 100,
+      description: 'Sound effect volume',
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{ "fontSize": 16, "volume": 50 }
+```
+
+![Number Input Preview](/previews/number-input.png)

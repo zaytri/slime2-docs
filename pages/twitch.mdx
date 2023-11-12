@@ -1,0 +1,17 @@
+import { Cards, Card } from 'nextra/components'
+import { Twitch } from '../components/icons'
+
+# <Twitch size={36} /> Twitch Events
+
+slime2 currently supports the following Twitch events, sending the relating event data to the event handler passed into [**`slime2.onEvent(){:js}`**](/functions/event#slime2oneventjs).
+
+<Cards>
+  <Card title='✉️ Message' href='/twitch/message' />
+  <Card title='❌ Remove Message' href='/twitch/remove-message' />
+  <Card title='🗑️ Clear Messages' href='/twitch/clear-messages' />
+  <Card title='🚫 Remove User' href='/twitch/remove-user' />
+</Cards>
+
+Every Twitch event has a `type` for the message type and a `source` set to `'twitch'{:js}`.
+
+Only the [**Message**](/twitch/message) event is a renderable event for [**managed mode**](/functions/event#managed-mode). Other events won't display anything if a [**`DocumentFragment`**](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) is returned.

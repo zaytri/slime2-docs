@@ -1,0 +1,140 @@
+import { FileTree, Tabs, Callout } from 'nextra/components'
+
+# 📄 Starter Template
+
+At minimum, a slime2 widget is composed of 3 files: HTML, CSS, and JS. An `assets` folder is also necessary if you want to have image, video, or audio input settings.
+
+<FileTree>
+  <FileTree.Folder name='widget' defaultOpen>
+    <FileTree.Folder name='assets' defaultOpen />
+    <FileTree.File name='widget.css' />
+    <FileTree.File name='widget.html' />
+    <FileTree.File name='widget.js' />
+  </FileTree.Folder>
+</FileTree>
+
+<Callout type='warning'>
+  When testing a widget that uses stream data, you'll have a
+  `SLIME2_PLATFORM_KEY.js` file. When releasing your widget to the public, make
+  sure that file is **not included** in your release zip.
+</Callout>
+
+If you'd like to start off with a full widget, you can build off of the lastest release of [**Simple Chat**](https://github.com/zaytri/slime2/tree/main/widgets/release-simple-chat).
+
+Otherwise, if you want to start from scratch, you can start with these template files:
+
+<Tabs items={['HTML', 'CSS', 'JS']}>
+  <Tabs.Tab>
+    <Callout type='warning'>
+      Make sure to replace `slime2@version` with a [released slime2
+      version](https://github.com/zaytri/slime2/releases), like `slime2@1.0.0`.
+    </Callout>
+
+    ```html filename="widget.html"
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <!-- JQuery -->
+        <script
+          src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+          integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+          crossorigin="anonymous"
+        ></script>
+
+        <!-- widget JS/CSS -->
+        <script src="widget.js"></script>
+        <link href="widget.css" rel="stylesheet" />
+
+        <!-- replace slime2@version below with the slime2 version you want to use, like slime2@1.0.0 -->
+        <script
+          type="module"
+          crossorigin
+          src="https://cdn.jsdelivr.net/gh/zaytri/slime2@version/release/slime2.js"
+        ></script>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/zaytri/slime2@version/release/slime2.css"
+        />
+      </head>
+
+      <body>
+        <main id="slime2-root"></main>
+      </body>
+
+      <template id="message-template">
+        <div class="message"></div>
+      </template>
+    </html>
+    ```
+
+  </Tabs.Tab>
+  <Tabs.Tab>
+
+    ```css filename="widget.css"
+    /* Container for the slime2 system */
+    #slime2-root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* Container for the renderable events from slime2 */
+    #slime2-event-list {
+    }
+
+    /* Container for each renderable event from slime2 */
+    .slime2-event {
+    }
+
+    /* Widget-defined class */
+    .message {
+    }
+    ```
+
+  </Tabs.Tab>
+  <Tabs.Tab>
+
+    ```js filename="widget.js"
+    /**
+     * slime2:ready event
+     * fired once, when the slime2 global variable is ready to use
+     */
+    addEventListener('slime2:ready', () => {
+      // only necessary if you need it to connect to Twitch
+      slime2.widget.loadPlatform('twitch')
+
+      // name of data file where users saved their settings, along with the setting definitions
+      slime2.widget.loadSettings('widget-data.js', [
+        {
+          label: 'Text Input',
+          id: 'text',
+          type: 'text-input',
+        },
+     ])
+
+      // main event handler
+      slime2.onEvent(event => {
+        if (event.type === 'message') {
+          const messageClone = $(slime2.cloneTemplate('message-template'))
+          messageClone.find('.message').text(event.message.text)
+          return { fragment: messageClone }
+        }
+      })
+    })
+
+    /**
+     * slime2:widget-data-update event
+     * fired every time a widget setting is changed (including on initial load)
+     * use this to update the widget live, rather than the user having to refresh
+     */
+    addEventListener('slime2:widget-data-update', () => {
+      // slime2.widget.getData() will always fetch the latest widget data,
+      // defined by the settings you loaded
+      const data = slime2.widget.getData()
+
+      // do something with the latest widget settings data
+    })
+    ```
+
+  </Tabs.Tab>
+</Tabs>

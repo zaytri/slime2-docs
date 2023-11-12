@@ -1,0 +1,17 @@
+{
+  "index": "Welcome!",
+  "start": "Getting Started",
+  "functions": "Functions",
+  "---": {
+    "title": "Reference",
+    "type": "separator"
+  },
+  "twitch": "Twitch Events",
+  "settings": "Widget Settings",
+  "forums": {
+    "title": "slime2 forums",
+    "type": "page",
+    "href": "https://forums.slime2.stream/",
+    "newWindow": true
+  }
+}

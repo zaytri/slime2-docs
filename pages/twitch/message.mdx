@@ -1,0 +1,318 @@
+import { Cards, Card, Tabs } from 'nextra/components'
+import { Twitch } from '../../components/icons'
+
+# <Twitch size={36} /> Message Event
+
+There are 8 unique types of messages, that all contain all the Event Data below, + `message` containing `type` + additional data specific to that message type.
+
+<Cards>
+  <Card title='💬 Basic Message' href='#basicmessage' />
+  <Card title='👻 Action Message' href='#actionmessage' />
+  <Card title='🌟 Highlight Message' href='#highlightmessage' />
+  <Card title='💸 Cheer Message' href='#cheermessage' />
+  <Card title='↩️ Reply Message' href='#replymessage' />
+  <Card title='🎁 Redeem Message' href='#redeemmessage' />
+  <Card title='🔁 Resub Message' href='#resubmessage' />
+  <Card title='📢 Announcement Message' href='#announcementmessage' />
+</Cards>
+
+## Message Event Data
+
+`user` is defined further below as [**`User`**](#user).
+
+`parts` gives you a parsed version of `text`, as a [**`Part`**](#part) array of text, emotes, and cheermotes.
+
+`first` is `true{:js}` if this is a first-time chat message.
+
+`tags` is the raw chat data from Twitch, if you need that.
+
+`remove` is a function you can use to manually remove the rendered event if using [**managed mode**](/functions/event#managed-mode).
+
+<Tabs items={['Event Data Definition', 'Real Data Example']}>
+  <Tabs.Tab>
+
+    ```ts filename="Event Data"
+    type MessageEvent = {
+      type: 'message'
+      id: string // same as id in message
+      userId: string // same as id in user
+      renderable: true
+      remove: () => void
+      message: {
+        id: string
+        date: Date
+        user: User
+        text: string
+        parts: Part[]
+        first: boolean
+        tags: Map<string, string>
+      } & (
+        | BasicMessage
+        | ActionMessage
+        | HighlightMessage
+        | CheerMessage
+        | ReplyMessage
+        | RedeemMessage
+        | ResubMessage
+        | AnnouncementMessage
+      )
+      source: 'twitch'
+    }
+    ```
+
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+
+    ```js filename="Example"
+    event = {
+      type: 'message',
+      id: '48399e5d-cf27-47f8-b8b2-e3ef551326fe',
+      userId: '85074694',
+      message: {
+        id: '48399e5d-cf27-47f8-b8b2-e3ef551326fe',
+        first: false,
+        date: '2023-11-11T09:55:52.937Z',
+        text: 'hi everyone!! TransgenderPride',
+        parts: [
+          {
+            type: 'text',
+            text: 'hi everyone!! ',
+          },
+          {
+            type: 'emote',
+            text: 'TransgenderPride',
+            emote: {
+              id: '307827377',
+              name: 'TransgenderPride',
+              images: {
+                default: {
+                  x1: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/default/light/1.0',
+                  x2: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/default/light/2.0',
+                  x4: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/default/light/3.0',
+                },
+                static: {
+                  x1: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/static/light/1.0',
+                  x2: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/static/light/2.0',
+                  x4: 'https://static-cdn.jtvnw.net/emoticons/v2/307827377/static/light/3.0',
+                },
+              },
+              source: 'twitch',
+            },
+          },
+        ],
+        user: {
+          id: '85074694',
+          userName: 'zaytri',
+          displayName: 'Zaytri',
+          pronouns: 'She/Her',
+          badges: [
+            {
+              id: 'broadcaster',
+              image:
+                'https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/3',
+            },
+            {
+              id: 'subscriber',
+              image:
+                'https://static-cdn.jtvnw.net/badges/v1/d4fb71b1-0e2f-4d77-a532-25c21e957e48/3',
+            },
+          ],
+          color: '#A9E694',
+          roles: {
+            broadcaster: true,
+            moderator: false,
+            artist: false,
+            vip: false,
+            founder: false,
+            subscriber: true,
+          },
+          followDate: '1970-01-01T00:00:00.000Z',
+        },
+        tags: Map, // Map of all the tag data for this message from Twitch
+        type: 'basic',
+      },
+      source: 'twitch',
+      renderable: true,
+      remove: Function // remove function
+    }
+    ```
+
+  </Tabs.Tab>
+</Tabs>
+
+## `BasicMessage`
+
+Any message that isn't of a special type.
+
+```ts filename="Basic Message Data"
+type BasicMessage = { type: 'basic' }
+```
+
+## `ActionMessage`
+
+Messages created using the `/me` command.
+
+```ts filename="Action Message Data"
+type ActionMessage = { type: 'action' }
+```
+
+## `HighlightMessage`
+
+Messages created using the "Highlight My Message" channel point reward.
+
+```ts filename="Highlight Message Data"
+type ActionMessage = { type: 'highlight' }
+```
+
+## `CheerMessage`
+
+[**Cheers**](https://help.twitch.tv/s/article/guide-to-cheering-with-bits?language=en_US) are messages that contains bits.
+
+`amount` is the total number of bits cheered in the message.
+
+```ts filename="Cheer Message Data"
+type CheerMessage = {
+  type: 'cheer'
+  cheer: { amount: number }
+}
+```
+
+## `ReplyMessage`
+
+When a user uses the "Reply to Message" feature in chat.
+
+`reply` contains details of the message being replied to.
+
+```ts filename="Reply Message Data"
+type ReplyMessage = {
+  type: 'reply'
+  reply: {
+    id: string
+    text: string
+    user: {
+      id: string
+      userName: string
+      displayName: string
+    }
+  }
+}
+```
+
+## `RedeemMessage`
+
+When a user redeems a channel point reward that requires text.
+
+`redeem` contains details of the channel point reward.
+
+```ts filename="Redeem Message Data"
+type RedeemMessage = {
+  type: 'redeem'
+  redeem: {
+    id: string
+    name: string
+    image: string
+    color: string
+    cost: number
+  }
+}
+```
+
+## `ResubMessage`
+
+When a user sends a resub message.
+
+```ts filename="Resub Message Data"
+type ResubMessage = {
+  type: 'resub'
+  resub: {
+    months: number
+    tier: '1000' | '2000' | '3000' | 'Prime'
+  }
+}
+```
+
+## `AnnouncementMessage`
+
+When a moderator sends an announcement using [**`/announce`**](https://help.twitch.tv/s/article/chat-commands?language=en_US#AllMods).
+
+```ts filename="Announcement Message Data"
+type AnnouncementMessage = {
+  type: 'announcement'
+  announcement: { color: 'PRIMARY' | 'BLUE' | 'GREEN' | 'ORANGE' | 'PURPLE' }
+}
+```
+
+## `User`
+
+`pronouns` is `null{:js}` if the user hasn't set pronouns.
+
+`color` is set to a random twitch chat color if the user hasn't set a chat color. Their color will always be the same color for the entire session.
+
+`followDate` is `null{:js}` if the user hasn't followed. The broadcaster is assigned `new Date(0){:js}` _(January 1, 1970, UTC)_.
+
+```ts filename="User Data"
+type User = {
+  id: string
+  userName: string
+  displayName: string
+  badges: Badge[]
+  pronouns: string | null
+  color: string
+  followDate: Date | null
+  roles: {
+    broadcaster: boolean
+    moderator: boolean
+    artist: boolean
+    vip: boolean
+    founder: boolean
+    subscriber: boolean
+  }
+}
+
+type Badge = {
+  id: string
+  image: string
+}
+```
+
+## `Part`
+
+There are 3 kinds of parts, `TextPart`, `CheerPart`, and `EmotePart`. They all include the `type` and `text` properties.
+
+Only channel emotes are parsed from [**BetterTTV**](https://betterttv.com/) and [**FrankerFaceZ**](https://www.frankerfacez.com/). Global emotes from those sources are not included.
+
+```ts filename="Part Data"
+type Part = { text: string } & (TextPart | CheerPart | EmotePart)
+
+type TextPart = { type: 'text' }
+
+type CheerPart = {
+  type: 'cheer'
+  name: string
+  amount: number
+  color: string
+  images: Images
+}
+
+type EmotePart = {
+  type: 'emote'
+  id: string
+  name: string
+  images: Images
+  source: 'twitch' | 'betterttv' | 'frankerfacez'
+}
+
+type Images = {
+  default: Urls
+  static: Urls
+}
+
+type Urls = {
+  x1: string
+  x2: string
+  x4: string
+}
+```
+
+> 7TV will never be supported, and widgets that include 7TV support will not be allowed on the forums. More information here: https://twitter.com/imZaytri/status/1461147801144868873.

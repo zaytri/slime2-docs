@@ -1,0 +1,59 @@
+import { Callout } from 'nextra/components'
+
+# 🔉 Audio Input Setting
+
+An audio input can accept a local audio file.
+
+<Callout type='warning'>
+  Local files will only work if they exist in the widget `assets` folder.
+</Callout>
+
+If `multiple` is set to `true{:js}`, it can accept multiple audio files, and gives you an array of strings.
+
+```ts filename="Setting Definition"
+type AudioInputSetting = {
+  type: 'audio-input'
+  label: string
+  id: string
+  defaultValue?: string | null
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is `null`.
+
+```ts filename="Setting Definition" {5-6}
+type AudioInputSetting = {
+  type: 'audio-input'
+  label: string
+  id: string
+  multiple: true
+  defaultValue?: string[]
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is an empty array `[]{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Sound Effect',
+      id: 'soundEffect',
+      type: 'audio-input',
+      multiple: true,
+      description:
+        'This sound effect will be played with the alert. If you add multiple sounds, one of them will be chosen at random for every alert.',
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{ "soundEffect": [] }
+```
+
+![Audio Input Preview](/previews/audio-input.png)

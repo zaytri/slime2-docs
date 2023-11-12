@@ -1,0 +1,86 @@
+# 📦 Widget Functions
+
+## `slime2.widget.loadPlatform(){:js}`
+
+```js
+slime2.widget.loadPlatform(platformName)
+```
+
+Use this to indicate the streaming platform you want to load.
+
+Required to receive stream events using [**`slime2.onEvent(){:js}`**](/functions/event#slime2oneventjs).
+
+```js filename="Example"
+slime2.widget.loadPlatform('twitch')
+```
+
+> Currently, the only supported platform is `'twitch'{:js}`.
+
+## `slime2.widget.loadSettings(){:js}`
+
+```js
+slime2.widget.loadSettings(dataFileName, settings)
+```
+
+Set the file name to retrieve saved widget data from, and define your widget settings.
+
+All setting types and examples of them can be found in the [**Widget Settings Reference**](/settings).
+
+```js filename="Example"
+slime2.widget.loadSettings('widget-data.js', [
+  {
+    label: 'Text Input',
+    id: 'widgetText',
+    type: 'text-input',
+  },
+])
+```
+
+## `slime2.widget.getData(){:js}`
+
+```js
+slime2.widget.getData()
+slime2.widget.getData(groupId)
+slime2.widget.getData(groupId, valueId)
+```
+
+Get the latest widget data, defined by the settings you loaded in [**`slime2.widget.loadSettings(){:js}`**](#slime2widgetloadsettingsjs).
+
+```js filename="Example"
+const data = slime2.widget.getData()
+```
+
+Optionally, you can give it a group ID to get a specific group, and a value ID to get a specific value from that group. Returns `null` if the specified group or value could not be found. Useful for [**Buttons**](/settings/button) in [**Groups**](/settings/group).
+
+```js filename="Example"
+// equivalent to data
+const sameData = slime2.widget.getData([])
+
+// equivalent to data.valueId
+const value = slime2.widget.getData([], 'valueId')
+
+// equivalent to data.groupId
+const group = slime2.widget.getData([{ id: 'groupId' }])
+
+// equivalent to data.groupId[2]
+const groupMultiple = slime2.widget.getData([{ id: 'groupId', index: 2 }])
+
+// equivalent to data.groupId.valueId
+const valueInGroup = slime2.widget.getData([{ id: 'groupId' }], 'valueId')
+
+// equivalent to data.groupId[7].valueId
+const valueInGroupMultiple = slime2.widget.getData(
+  [{ id: 'groupId', index: 7 }],
+  'valueId',
+)
+
+// equivalent to data.groupIdA.groupIdB[0].groupIdC.valueId
+const deeplyNestedValue = slime2.widget.getData(
+  [{ id: 'groupIdA' }, { id: 'groupIdB', index: 0 }, { id: 'groupIdC' }],
+  'valueId',
+)
+```
+
+> Usually you'll never need to pass any parameters to get the data you need.
+>
+> [**Simple Chat**](https://github.com/zaytri/slime2/tree/main/widgets/release-simple-chat) provides a good example of how to use this function.

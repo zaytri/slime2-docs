@@ -1,0 +1,27 @@
+# 🔤 Text Display Setting
+
+Display text. Any URLs included in the text will automatically be made into a clickable link.
+
+```ts filename="Setting Definition"
+type TextDisplaySetting = {
+  type: 'text-display'
+  label: string
+  id: string
+}
+```
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Website: https://slime2.stream/',
+      id: 'website',
+      type: 'text-display',
+    },
+  ])
+})
+```
+
+![Text Display Preview](/previews/text-display.png)

@@ -1,0 +1,44 @@
+# ✅ Boolean Input Setting
+
+Works as a checkbox, gives you a `true{:js}`/`false{:js}` value.
+
+```ts filename="Setting Definition"
+type BooleanInputSetting = {
+  type: 'boolean-input'
+  label: string
+  id: string
+  defaultValue?: boolean
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is `false{:js}`.
+
+## Example
+
+```js filename="JavaScript using JQuery"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Dark Mode',
+      id: 'dark',
+      type: 'boolean-input',
+      defaultValue: false,
+      description: 'When enabled, the background will be black.',
+    },
+  ])
+})
+
+addEventListener('slime2:widget-data-update', () => {
+  const { dark } = slime2.widget.getData()
+
+  $('body').css({ backgroundColor: dark ? 'black' : 'white' })
+})
+```
+
+```json filename="Initial Data"
+{ "dark": false }
+```
+
+![Boolean Input Unchecked Preview](/previews/boolean-input-false.png)
+![Boolean Input Checked Preview](/previews/boolean-input-true.png)

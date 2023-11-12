@@ -1,0 +1,116 @@
+import { Cards, Card } from 'nextra/components'
+import { Twitch } from '../../components/icons'
+
+# 🌠 Event Functions
+
+## `slime2.onEvent(){:js}`
+
+```js
+slime2.onEvent(eventHandlerFunction)
+```
+
+For every stream event, your event handler function will be called, sending in the event data.
+
+### Managed Mode
+
+In managed mode, slime2 will automatically handle:
+
+- Rendering the event (based on the [**`DocumentFragment`**](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) you give it)
+- Calling your optional callback directly after the event has been fully rendered
+  - Includes waiting for all images within to load
+- Automatic deletion of:
+  - Rendered message events when chat messages are deleted or the chat is cleared
+  - All rendered events from a user that has been timed out or banned
+  - Old events after the event list has more than the event max
+  - Expired events after the optional event expiration time has been reached
+
+To use managed mode, return an object with a [**`DocumentFragment`**](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment) (created from [**cloning**](https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode) a [**template**](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template)), along with an optional callback function. The helper function [**`slime2.cloneTemplate(){:js}`**](/functions/helper#slime2clonetemplatejs) is provided to easily clone a template.
+
+You can find all the events that slime2 current supports here:
+
+<Cards>
+  <Card icon={<Twitch size={16} />} title='Twitch Events' href='/twitch' />
+</Cards>
+
+```js filename="Example"
+slime2.onEvent(event => {
+  if (event.type === 'message') {
+    const messageClone = $(slime2.cloneTemplate('message-template'))
+
+    messageClone.find('.message').text(event.message.text)
+
+    return {
+      fragment: messageClone,
+      callback: element => {
+        console.log('message rendered!')
+      },
+    }
+  }
+})
+```
+
+> By returning nothing, slime2 will not render the event. [**Simple Chat**](https://github.com/zaytri/slime2/tree/main/widgets/release-simple-chat) is a great example of how to utilize this to create message filters.
+>
+> You will need to handle the `'remove-user'{:js}`, `'remove-message'{:js}`, and `'remove-message'{:js}` events yourself if you choose to not use managed mode at all.
+
+## `slime2.setMaxEvents(){:js}`
+
+```js
+slime2.setMaxEvents(max)
+```
+
+**[Managed mode](#managed-mode) only.** Sets the max number of rendered events returned in [**`slime2.onEvent(){:js}`**](#slime2oneventjs). When the number of rendered events is greater than the max, the oldest events are automatically removed.
+
+```js filename="Example"
+slime2.setMaxEvents(10)
+```
+
+> By default, max events is set to 100.
+
+## `slime2.setEventExpiration(){:js}`
+
+```js
+slime2.setEventExpiration(expirationTime)
+slime2.setEventExpiration(expirationTime, animationOptions)
+```
+
+**[Managed mode](#managed-mode) only.** Removes rendered events returned in [**`slime2.onEvent(){:js}`**](#slime2oneventjs) automatically after the set expiration time (in milliseconds).
+
+```js filename="JavaScript"
+slime2.setEventExpiration(10 * 1000) // 10 seconds
+```
+
+You can also pass in optional animation options:
+
+- `animationTime`: Rendered events will be removed after the expiration time + animation time
+- `animationClass`: This class will be automatically applied to the rendered event after the expiration time
+- `animationFunction`: This function will be automatically called after the expiration time with the rendered event element passed in
+
+```js filename="JavaScript" {4-8}
+slime2.setEventExpiration(
+  10 * 1000, // 10 seconds
+  {
+    animationTime: 500, // 0.5 seconds
+    animationClass: 'fade',
+    animationFunction: element => {
+      console.log('fading')
+    },
+  },
+)
+```
+
+> [**Simple Chat**](https://github.com/zaytri/slime2/tree/main/widgets/release-simple-chat) is a great example of how to utilize this to create exit animations.
+
+## `slime2.setEventDelay(){:js}`
+
+```js
+slime2.setEventDelay(delay)
+```
+
+Applies a delay (in milliseconds) to stream events before they're sent to `slime2.onEvent`.
+
+```js filename="Example"
+slime2.setEventDelay(1000) // 1 second delay
+```
+
+> By default, there is no delay.

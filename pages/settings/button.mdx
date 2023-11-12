@@ -1,0 +1,36 @@
+# ▶️ Button Setting
+
+The `onClick(){:js}` function will be called any time the button is clicked, passing in the setting's `groupId` and `id`. View [**`slime2.widget.getData(){:js}`**](/functions/widget#slime2widgetgetdatajs) for examples of how `groupId` works.
+
+```ts filename="Setting Definition"
+type ButtonSetting = {
+  type: 'button'
+  label: string
+  id: string
+  onClick: (groupId: GroupId, id: string) => void
+}
+
+type GroupId = {
+  id: string
+  index?: number
+}[]
+```
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'My Button',
+      id: 'myButton',
+      type: 'button',
+      onClick: () => {
+        console.log('clicked!')
+      },
+    },
+  ])
+})
+```
+
+![Button Preview](/previews/button.png)

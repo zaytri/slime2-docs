@@ -1,0 +1,95 @@
+import { Tabs } from 'nextra/components'
+
+# 🔧 Helper Functions
+
+## `slime2.cloneTemplate(){:js}`
+
+```js
+const messageClone = slime2.cloneTemplate(templateId)
+```
+
+Given an ID, this will return a new clone of a `<template>{:html}` in your HTML file.
+
+Throws an error if no element matches that ID, or if the element with that ID is not a `<template>{:html}`.
+
+<Tabs items={['JS', 'HTML']}>
+  <Tabs.Tab>
+    ```js filename="Example"
+    const messageClone = slime2.cloneTemplate('message-template')
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ```html filename="Example"
+    <template id='message-template'>
+      <div class='message'></div>
+    </template>
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+> Internally this just calls the [**`getElementById(){:js}`**](https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById) and [**`cloneNode(){:js}`**](https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode) functions.
+
+## `slime2.random{:js}`
+
+Several helper functions to get random values.
+
+```js filename="Example"
+// generate a random number between 0 (included) and 10 (excluded)
+slime2.random.number(0, 10)
+
+// generate a random integer between 0 (included) and 10 (included)
+slime2.random.integer(0, 10)
+
+// returns true 70% of the time
+slime2.random.chance(70)
+
+// returns a random boolean
+// equivalent to slime2.random.chance(50)
+slime2.random.boolean()
+
+// returns a random index from the given array
+slime2.random.index(array)
+
+// returns a random item from the given array
+slime2.random.item(array)
+```
+
+## `slime2.color{:js}`
+
+Equivalent to `Color` from [**Color.js**](https://colorjs.io/), along with additional helper functions
+
+```js filename="JavaScript"
+// converts a given text color to a color
+// more accessible on a black background
+slime2.color.light(textColor)
+
+// converts a given text color to a color
+// more accessible on a white background
+slime2.color.dark(textColor)
+
+// given a foreground color, returns 'black' or 'white' depending on
+// which background color that foreground color is more accessible on
+slime2.accessibleBackground(foregroundColor)
+
+// given a background color, returns 'black' or 'white' depending on
+// which foreground color that background color is more accessible behind
+slime2.accessibleForeground(backgroundColor)
+```
+
+## `slime2.storage{:js}`
+
+Functions to utilize the permanent storage from [**IndexedDB**](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API), if you need data that persists between sessions.
+
+This can even be used to share data between widgets, if they use the same storage name.
+
+Contains all the functions from [**idb-keyval**](https://github.com/jakearchibald/idb-keyval#usage), but without `createStore(){:js}`. Instead, you must use `slime2.storage.use('storageName'){:js}` before you can use any of the storage functions. It's recommended to call this at the top of the [**`'slime2:ready'{:js}`**](/start/listeners#slime2readyjs) event listener.
+
+```js filename="Example"
+addEventListener('slime2:ready', async () => {
+  slime2.storage.use('myWidgetStorage')
+  const storedData = await slime2.storage.get('dataKey')
+})
+```
+
+> Note: All of the storage functions, other than `use(){:js}`, are `async{:js}`.

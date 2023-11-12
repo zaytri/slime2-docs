@@ -1,0 +1,37 @@
+# 🎨 Color Input Setting
+
+A color input is a specialized text input that has a color picker.
+
+```ts filename="Setting Definition"
+type ColorInputSetting = {
+  type: 'color-input'
+  label: string
+  id: string
+  defaultValue?: string
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is empty string `''{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Chat Box Background Color',
+      id: 'chatBackground',
+      type: 'color-input',
+      defaultValue: '#FC6C85',
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{ "chatBackground": "#FC6C85" }
+```
+
+![Color Input Preview](/previews/color-input.png)

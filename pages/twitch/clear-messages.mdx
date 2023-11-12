@@ -1,0 +1,14 @@
+import { Twitch } from '../../components/icons'
+
+# <Twitch size={36} /> Clear Messages Event
+
+Chat has been cleared by a moderator via the [**`/clear`**](https://help.twitch.tv/s/article/chat-commands?language=en_US#AllMods) command.
+
+[**Managed mode**](/functions/event#managed-mode) will automatically remove all rendered message events for you when this event is encountered.
+
+```ts filename="Event Data"
+type ClearMessagesEvent = {
+  type: 'clear-messages'
+  source: 'twitch'
+}
+```

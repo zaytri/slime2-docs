@@ -1,0 +1,28 @@
+# 🎧 Event Listeners
+
+There are 2 [**custom events**](https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events) that slime2 fires that are important to create event listeners for.
+
+## `'slime2:ready'{:js}`
+
+This event is fired once, when the `slime2` global variable is ready to use.
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadPlatform('twitch')
+  slime2.widget.loadSettings('widget-data.js', widgetSettings)
+  slime2.onEvent(event => {
+    // handle stream events
+  })
+})
+```
+
+## `'slime2:widget-data-update'{:js}`
+
+This event is fired every time a widget setting is changed, included on the initial settings load. Use this to update the widget live as the user changes settings, rather than the user needed to refresh.
+
+```js filename="JavaScript"
+addEventListener('slime2:widget-data-update', () => {
+  const data = slime2.widget.getData()
+  // do something with the latest widget settings data
+})
+```

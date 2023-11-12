@@ -1,0 +1,31 @@
+# 🖼️ Image Display Setting
+
+Displays an image. You can use this to display a logo or even a preview of a specific setting.
+
+```ts filename="Setting Definition"
+type ImageDisplaySetting = {
+  type: 'image-display'
+  label: string
+  id: string
+  url: string
+  alt?: string
+}
+```
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'slime2',
+      id: 'logo',
+      type: 'image-display',
+      url: 'https://i.imgur.com/5JI7is5.png',
+      alt: 'slime2 logo',
+    },
+  ])
+})
+```
+
+![Image Display Preview](/previews/image-display.png)

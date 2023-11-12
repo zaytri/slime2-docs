@@ -1,0 +1,40 @@
+# 🖊️ Font Input Setting
+
+A font input is a specialized text input that has an optional dropdown for Windows/Mac fonts, along with a font preview field that can be freely edited.
+
+Any font that is installed on a user's computer can be manually typed in.
+
+If you want to allow Google Fonts, either tell the user to install those fonts or show them how to add code to import them as web fonts.
+
+```ts filename="Setting Definition"
+type FontInputSetting = {
+  type: 'font-input'
+  label: string
+  id: string
+  defaultValue?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is empty string `''{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Alert Text Font',
+      id: 'alertFont',
+      type: 'font-input',
+      defaultValue: 'Nice Sugar',
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{ "alertFont": "Nice Sugar" }
+```
+
+![Font Input Preview](/previews/font-input.png)

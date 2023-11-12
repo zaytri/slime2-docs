@@ -1,0 +1,15 @@
+import { Twitch } from '../../components/icons'
+
+# <Twitch size={36} /> Remove User Event
+
+The user with the specified `userId` has been timed out or banned in chat.
+
+[**Managed mode**](/functions/event#managed-mode) will automatically remove all rendered events related to that user for you when this event is encountered.
+
+```typescript filename="Event Data"
+type RemoveUserEvent = {
+  type: 'remove-user'
+  userId: string
+  source: 'twitch'
+}
+```

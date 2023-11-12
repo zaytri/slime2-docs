@@ -1,0 +1,154 @@
+import { Cards, Card } from 'nextra/components'
+
+# 📁 Group Setting
+
+There are 2 different groups, **Standard** and **Multiple**, depending on the value of `multiple`.
+
+<Cards>
+  <Card title='📁 Standard Group' href='#standard-group' />
+  <Card title='🗂️ Multiple Group' href='#multiple-group' />
+</Cards>
+
+Groups allow you to group several settings together, with their own settings window.
+
+`settings` is an array of any setting, including groups.
+
+## Standard Group
+
+The data returned by a group is an object.
+
+```ts filename="Setting Definition"
+type GroupSetting = {
+  type: 'group'
+  label: string
+  id: string
+  settings: Setting[]
+}
+```
+
+> `Setting` is any other widget setting, including groups.
+
+## Multiple Group
+
+Set `multiple` to `true{:js}` to create a multiple group.
+
+A multiple group allows for multiple instances of the settings within to be created, without having to define different groups. These instances can be added to, copied, or removed by the user. The data returned by a multiple group is an array of objects, rather than a single object.
+
+If `description` is provided, it's created as a special [**Text Display**](/settings/text-display) that exists above all the setting instances.
+
+```ts filename="Setting Definition" {6-7}
+type GroupMultipleSetting = {
+  type: 'group'
+  label: string
+  id: string
+  settings: Setting[]
+  multiple: true
+  description?: string
+}
+```
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  const alertSettings = [
+    {
+      label: 'Variant Name',
+      id: 'name',
+      type: 'text-input',
+    },
+    {
+      label: 'Test Alert',
+      id: 'test',
+      type: 'button',
+      onClick: groupId => {
+        const alertData = slime2.widget.getData(groupId)
+        console.log(alertData)
+      },
+    },
+    {
+      label: 'Enabled?',
+      id: 'enabled',
+      type: 'boolean-input',
+      defaultValue: true,
+    },
+    {
+      label: 'Image',
+      id: 'image',
+      type: 'image-input',
+    },
+    {
+      label: 'Message',
+      id: 'message',
+      type: 'text-input',
+      multiline: true,
+      description: "{user} will be replaced by the user's display name",
+    },
+    {
+      label: 'Duration (in seconds, 30 max)',
+      id: 'duration',
+      type: 'number-input',
+      slider: true,
+      defaultValue: 3,
+      step: 0.1,
+      min: 1,
+      max: 30,
+    },
+  ]
+
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Alerts',
+      id: 'alerts',
+      type: 'group',
+      settings: [
+        {
+          label: 'Follows',
+          id: 'follows',
+          type: 'group',
+          multiple: true,
+          settings: alertSettings,
+        },
+        {
+          label: 'Subscriptions',
+          id: 'subs',
+          type: 'group',
+          multiple: true,
+          settings: alertSettings,
+        },
+      ],
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{
+  "alerts": {
+    "follows": [
+      {
+        "name": "",
+        "enabled": true,
+        "image": null,
+        "message": "",
+        "duration": 3,
+        "__id": "follows_x_7kAsTxaVDAiiQDMJblq"
+      }
+    ],
+    "subs": [
+      {
+        "name": "",
+        "enabled": true,
+        "image": null,
+        "message": "",
+        "duration": 3,
+        "__id": "subs_IQkphy0HAe2RQzm0gdaw1"
+      }
+    ]
+  }
+}
+```
+
+> You can ignore `__id`, it's randomly generated for every settings instance in a multiple group, so that slime2 can render them properly. Because of this, **never set a setting `id` to `'__id'{:js}`**.
+
+![Group Preview](/previews/group.png)

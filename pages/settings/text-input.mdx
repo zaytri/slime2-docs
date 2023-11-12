@@ -1,0 +1,111 @@
+import { Cards, Card } from 'nextra/components'
+
+# 📝 Text Input Setting
+
+There are 3 different text inputs, **Standard**, **Multiline**, and **Multiple**, depending on the values of `multiline` and `multiple`.
+
+> Setting both `multiple` and `multiline` to `true{:js}` doesn't combine them. Multiple will take priority.
+
+<Cards>
+  <Card title='📝 Standard Text Input' href='#standard-text-input' />
+  <Card title='📖 Multiline Text Input' href='#multiline-text-input' />
+  <Card title='📑 Multiple Text Input' href='#multiple-text-input' />
+</Cards>
+
+## Standard Text Input
+
+```ts filename="Setting Definition"
+type TextInputSetting = {
+  type: 'text-input'
+  label: string
+  id: string
+  defaultValue?: string
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is empty string `''{:js}`.
+
+## Multiline Text Input
+
+Set `multiline` to `true{:js}` to create a multiline text input.
+
+This works as a text area that automatically resizes to fit the content.
+
+```ts filename="Setting Definition" {5}
+type TextInputMultilineSetting = {
+  type: 'text-input'
+  label: string
+  id: string
+  multiline: true
+  defaultValue?: string
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is empty string `''{:js}`.
+
+## Multiple Text Input
+
+Set `multiple` to `true{:js}` to create a multiple text input.
+
+This allows the user to create a list of strings.
+
+```ts filename="Setting Definition" {5-6}
+type TextInputMultipleSetting = {
+  type: 'text-input'
+  label: string
+  id: string
+  multiple: true
+  defaultValue?: string[]
+  placeholder?: string
+  description?: string
+}
+```
+
+> If no `defaultValue` is given, the default value is an empty array `[]{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Alert Text',
+      id: 'alertText',
+      type: 'text-input',
+      defaultValue: 'Thank you for subscribing {user}!',
+      placeholder: 'Enter in your alert text',
+      description: "{user} will be replaced by the user's display name",
+    },
+    {
+      label: 'Custom CSS',
+      id: 'css',
+      type: 'text-input',
+      multiline: true,
+      placeholder: 'The CSS defined here will be applied on the widget box',
+    },
+    {
+      label: 'Bots',
+      id: 'bots',
+      type: 'text-input',
+      multiple: true,
+      defaultValue: ['Sery_Bot', 'Nightbot', 'StreamElements', 'Streamlabs'],
+      placeholder: 'Bot name',
+      description: "These bots won't show up in the chat box.",
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{
+  "alertText": "{user} has subscribed!",
+  "css": "",
+  "bots": ["Sery_Bot", "Nightbot", "StreamElements", "Streamlabs"]
+}
+```
+
+![Text Input Preview](/previews/text-input.png)

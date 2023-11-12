@@ -1,0 +1,15 @@
+import { Twitch } from '../../components/icons'
+
+# <Twitch size={36} /> Remove Message Event
+
+The message with the specified `messageId` has been deleted by a moderator.
+
+[**Managed mode**](/functions/event#managed-mode) will automatically remove that rendered message event for you when this event is encountered.
+
+```ts filename="Event Data"
+type RemoveMessageEvent = {
+  type: 'remove-message'
+  messageId: string
+  source: 'twitch'
+}
+```

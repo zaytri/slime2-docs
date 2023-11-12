@@ -1,2 +1,1 @@
-# slime2-docs
-Widget Code Documentation for slime2
+# slime2 docs: https://docs.slime2.stream/

@@ -1,0 +1,115 @@
+import { Cards, Card } from 'nextra/components'
+
+# 🔘 Select Input Setting
+
+There are 2 different select inputs, **Standard** and **Multiple**, depending on the value of `multiple`.
+
+<Cards>
+  <Card title='🔘 Standard Select Input' href='#standard-select-input' />
+  <Card title='☑️ Multiple Select Input' href='#multiple-select-input' />
+</Cards>
+
+## Standard Select Input
+
+Works similar to a series of radio buttons, where the user can only choose one option.
+
+```ts filename="Setting Definition"
+type SelectInputSetting = {
+  type: 'select-input'
+  label: string
+  id: string
+  defaultValue?: Value
+  options: Option[]
+  placeholder?: string
+  description?: string
+}
+
+type Option = {
+  label: string
+  value: Value
+}
+
+type Value = string | number | boolean
+```
+
+> If no `defaultValue` is given, the default value is the value of first option in `options`.
+
+## Multiple Select Input
+
+Set `multiple` to `true{:js}` to create a multiple select input.
+
+Works similar to a series of checkboxes, where the user can choose multiple options.
+
+```ts filename="Setting Definition" {5-6}
+type SelectInputMultipleSetting = {
+  type: 'select-input'
+  label: string
+  id: string
+  multiple: true
+  defaultValue?: Value[]
+  options: Option[]
+  placeholder?: string
+  description?: string
+}
+
+type Option = {
+  label: string
+  value: Value
+}
+
+type Value = string | number | boolean
+```
+
+> If no `defaultValue` is given, the default value is an empty array `[]{:js}`.
+
+## Example
+
+```js filename="JavaScript"
+addEventListener('slime2:ready', () => {
+  slime2.widget.loadSettings('widget-data.js', [
+    {
+      label: 'Font Weight',
+      id: 'fontWeight',
+      type: 'select-input',
+      defaultValue: 'bold',
+      options: [
+        { label: 'Normal', value: 'normal' },
+        { label: 'Bold', value: 'bold' },
+        { label: '100', value: 100 },
+        { label: '200', value: 200 },
+        { label: '300', value: 300 },
+        { label: '400', value: 400 },
+        { label: '500', value: 500 },
+        { label: '600', value: 600 },
+        { label: '700', value: 700 },
+        { label: '800', value: 800 },
+        { label: '900', value: 900 },
+      ],
+    },
+    {
+      label: 'Show messages from these types of users',
+      id: 'userFilter',
+      type: 'select-input',
+      multiple: true,
+      defaultValue: ['subs', 'mods', 'vips', 'artists'],
+      options: [
+        { label: 'Everyone', value: 'all' },
+        { label: 'Followers', value: 'followers' },
+        { label: 'Subscribers', value: 'subs' },
+        { label: 'Moderators', value: 'mods' },
+        { label: 'VIPs', value: 'vips' },
+        { label: 'Artists', value: 'artists' },
+      ],
+    },
+  ])
+})
+```
+
+```json filename="Initial Data"
+{
+  "fontWeight": "bold",
+  "userFilter": ["subs", "mods", "vips", "artists"]
+}
+```
+
+![Select Input Preview](/previews/select-input.png)
