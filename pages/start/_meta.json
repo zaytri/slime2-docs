@@ -1,4 +1,5 @@
 {
   "template": "Starter Template",
-  "listeners": "Event Listeners"
+  "listeners": "Event Listeners",
+  "migrate": "StreamElements Migration"
 }

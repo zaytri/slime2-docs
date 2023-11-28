@@ -1,0 +1,77 @@
+# ⛵ Migrating Widgets from StreamElements
+
+slime2 widgets work differently from StreamElements widgets, so this will be a guide on the differences, due to the technical limitations of slime2 as a local HTML overlay and the improvements that were added.
+
+> ✨ = New feature that didn't exist in StreamElements
+
+## Variables from settings must be used from the JS file
+
+StreamElements widgets allow you to use `{{variableName}}` or `{variableName}` to insert variables from settings data into your HTML/CSS/JS.
+
+This is **not possible** in slime2 since it uses your HTML/CSS/JS files directly without transforming them.
+
+Instead, you need to use the [**`slime2.widget.getData(){:js}`**](/functions/widget#slime2widgetgetdatajs) function to get the settings data and insert it into the HTML/CSS yourself.
+
+## No settings JSON, instead you define settings in JS
+
+The [**`slime2.widget.loadSettings(){:js}`**](/functions/widget#slime2widgetloadsettingsjs) function is used to define your settings.
+
+All setting types and examples of them can be found in the [**Widget Settings Reference**](/settings), and includes additional settings and options that did not exist in StreamElements!
+
+## Different event listeners
+
+StreamElements widgets had access to event listeners for `'onWidgetLoad'{:js}` and `'onEventReceived'{:js}`, and passed data in accordingly.
+
+Instead of those, slime2 has [**`'slime2:ready'{:js}`**](/start/listeners#slime2readyjs) and the function [**`slime2.onEvent(){:js}`**](/functions/event#slime2oneventjs).
+
+The `'slime2:ready'{:js}` event fires once, when the `slime2` global variable is ready to use. There is no data passed into it, instead you utilize the `slime2` variable.
+
+The `slime2.onEvent(){:js}` function is the replacement for `'onEventReceived'{:js}`. Give it a function and it'll pass in the event data in real time, as defined in the [**Twitch Event Reference**](/twitch).
+
+## Only Twitch Message Events
+
+In its current state, slime2 only has access to Twitch message events, as the original purpose was simply a chat overlay alternative. There are plans to expand this in the future, including additional platforms such as YouTube.
+
+## ✨ Live Updates
+
+In StreamElements, any change in settings by the user would result in the entire widget being refreshed, making it an annoying experience to make visual changes.
+
+The [**`'slime2:widget-data-update'{:js}`**](/start/listeners#slime2widgetdataupdatejs) event listener is the solution to that. Instead of refreshing the widget, this event will fire every time any setting is changed (including when the settings are initially loaded), and you can use the [**`slime2.widget.getData(){:js}`**](/functions/widget#slime2widgetgetdatajs) function to get the new data.
+
+By utilizing this, you can ensure that the user will see the widget changes in real time, making for a much better user experience. For an example of how to make that work, you can look at it's implementation in [**Simple Chat**](https://github.com/zaytri/slime2/tree/main/widgets/release-simple-chat).
+
+## ✨ Emotes are parsed for you
+
+Message events in StreamElements gave you emote data, but you still had to parse it yourself.
+
+In slime2, you are given an array of [**`parts`**](/twitch/message#part), where the message text has already been split up into emote, cheer, and text parts for you.
+
+All Twitch emotes and cheermotes are parsed, and channel emotes from [**BetterTTV**](https://betterttv.com/) and [**FrankerFaceZ**](https://www.frankerfacez.com/) are parsed as well.
+
+> Global emotes from 3rd party emote services are not included, and 7TV will never be included. Widgets that are submitted to the forums with support for any of those will not be accepted.
+
+## ✨ Buttons are directly given an `onClick(){:js}`
+
+In StreamElements, if you wanted code to respond to a settings button click you had to make an event listener for `'onEventReceived'{:js}`.
+
+In slime2, you can just give a [**Button**](/settings/button) an `onClick(){:js}` function directly.
+
+## ✨ You are free to split up your JS/CSS files
+
+In StreamElements, you could only ever have 1 JS file and 1 CSS file.
+
+In slime2, you can split that up as much as you want into multiple files, simply include them in the HTML `<head>{:html}`. **However**, due to technical limitations they all must be in the **same folder**, and **not** subfolders.
+
+## ✨ Nested Setting Groups
+
+In StreamElements, you could group settings, but you couldn't have groups within group.
+
+In slime2, you can infinitely nest [**Groups**](/settings/group) for better organization.
+
+## ✨ Multiple Groups
+
+In slime2 you can set `multiple` to `true{:js}` on a Group to create a [**Multiple Group**](/settings/group/#multiple-group).
+
+This allows for any number of multiple instances of the settings within that group to be created, without having to explicitly define different groups. These instances can be added to, copied, or removed by the user.
+
+An example of how to use this would be allowing the user to create any number of alert variations they want.
